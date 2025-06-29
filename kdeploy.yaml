@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insure-me-deploy
+  labels:
+    app: insure-me-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: insure-me-app
+  template:
+    metadata:
+      labels:
+        app: insure-me-app
+    spec:
+      containers:
+      - name: insure-me-container
+        image: shubhamxoxo/insure-me:latest
+        ports:
+        - containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insure-me-np-service
+  labels:
+    app: insure-me-app
+spec:
+  selector:
+    app: insure-me-app
+  type: NodePort
+  ports:
+  - nodePort: 31028
+    port: 8080
+    targetPort: 8082
